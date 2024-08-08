@@ -11,7 +11,12 @@ LIB_SRCS = src/convert.c
 LIB_OBJS = $(LIB_SRCS:src/%.c=%.o)
 
 # Targets
-all: $(LIBRARY) clean-obj
+all: $(LIBRARY) install clean-obj
+
+install: $(LIBRARY)
+	sudo cp $(LIBRARY) /usr/lib
+	sudo chmod 0755 /usr/lib/$(LIBRARY)
+	sudo ldconfig
 
 # Build the shared library
 $(LIBRARY): $(LIB_OBJS)
@@ -23,8 +28,10 @@ $(LIBRARY): $(LIB_OBJS)
 
 clean:
 	rm -f $(LIBRARY) $(LIB_OBJS)
+	sudo rm /usr/lib/$(LIBRARY)
 
 clean-obj: 
 	rm -f $(LIB_OBJS)
+	
 
 .PHONY: all clean clean-obj
